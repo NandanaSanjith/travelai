@@ -1,2 +1,3 @@
 # travelai
-travel project
+travel project server
+
