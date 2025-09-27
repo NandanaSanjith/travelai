@@ -2,10 +2,10 @@ from typing import Union, List, Dict, Any
 from datetime import datetime, timedelta
 import random
 
-def get_fake_flights(src_city: str,
+def get_flights(src_city: str,
                 dest_city: str,
                 start_date: str,
-                adults: int = 1) -> List[Dict[str, Any]]:
+                ) -> List[Dict[str, Any]]:
     """
     Generate sample flight data between two cities for a given date range.
 
@@ -14,7 +14,6 @@ def get_fake_flights(src_city: str,
         dest_city: Destination city code or name (e.g., "BLR" for Bangalore)
         start_date: Start date in YYYY-MM-DD format
         return_date: Return date in YYYY-MM-DD format
-        adults: Number of adult passengers
 
     Returns:
         List of dictionaries containing flight information
@@ -53,11 +52,13 @@ def get_fake_flights(src_city: str,
 
             # Generate random price
             base_price = random.randint(2000, 10000)
-            price = base_price * adults
+            price = base_price
+            seat_types = ["Business", "Economy", "Premium"]
+            random_seat = random.choice(seat_types)
 
             flight = {
                 "airline": airline,
-                "flight_number": flight_number,
+                "flight_id": flight_number,
                 "departure_city": src_city.upper(),
                 "arrival_city": dest_city.upper(),
                 "departure_date": date_str,
@@ -67,7 +68,9 @@ def get_fake_flights(src_city: str,
                 "duration": f"{duration_hours}h {duration_minutes}m",
                 "price": price,
                 "stops": random.choice(["Non-stop", "1 stop", "2 stops"]),
-                "available_seats": random.randint(5, 50)
+                "available_seats": random.randint(5, 50),
+                "seat_type":random_seat
+            
             }
             flights.append(flight)
 
