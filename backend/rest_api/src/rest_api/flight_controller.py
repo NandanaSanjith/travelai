@@ -1,8 +1,7 @@
-from pymongo import MongoClient
+from .db_client import get_db_client
 
 def read_flight_data(departure_city,arrival_city,start_date):
-    client = MongoClient("mongodb://localhost:27017/")
-    db = client["travel_ai"]
+    db = get_db_client()
     flights=db.flight_details.find({ "arrival_city":arrival_city.upper(),
                                     "departure_city" :departure_city.upper() ,
                                     "departure_date":start_date})
