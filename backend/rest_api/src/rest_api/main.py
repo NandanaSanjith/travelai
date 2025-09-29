@@ -43,9 +43,10 @@ def book_flight(flight_id: str,
                 email,
                 payment_details)
 
+
 @app.get("/change_booking")
 def change_booking(flight_number: str,
                 start_date: str,
                 adults):
-    return {"status": "success", "booking_id": "12345"}
+    return {"status": "success", "booking_id": "123456"}
 
