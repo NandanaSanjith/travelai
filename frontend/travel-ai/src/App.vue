@@ -1,6 +1,6 @@
 <script setup>
 import SearchBar from './components/SearchBar.vue';
-
+import FlightListView from './components/FlightListView.vue';
 </script>
 
 <template>
@@ -20,7 +20,9 @@ import SearchBar from './components/SearchBar.vue';
     </v-app-bar>
     
     <v-main>
-      <search-bar></search-bar>
+      <search-bar />
+      <flight-list-view />
+      
     </v-main>
     
     

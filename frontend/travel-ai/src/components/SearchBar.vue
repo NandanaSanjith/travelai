@@ -1,5 +1,5 @@
 <template> 
-<v-card elevation="8" class="pa-4 d-flex align-center" style="border-radius: 14px;">
+  <v-card elevation="8" class="pa-4 d-flex align-center" style="border-radius: 14px;">
       <v-select
         v-model="travelType"
         :items="['Flight', 'Train', 'Bus']"
@@ -16,7 +16,7 @@
       <v-btn color="primary" class="ml-3 px-6" height="56" @click="handleSearch">
         🔍 Search
       </v-btn>
-    </v-card>
+  </v-card>
 
     <!-- Dynamic Sections -->
     <v-container class="mt-6">
@@ -39,6 +39,7 @@
       </div>
     </v-container>
 </template>
+
 <script setup>
 import { ref } from "vue"
 
@@ -53,5 +54,6 @@ const handleSearch = () => {
   section.value = travelType.value // switch to chosen section
 }
 </script>
+
 <style>
 </style>
