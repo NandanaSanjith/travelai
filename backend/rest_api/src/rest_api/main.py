@@ -4,8 +4,17 @@ from pydantic import BaseModel
 from fastapi import FastAPI
 from .flight_controller import read_flight_data
 from .booking_controller import create_booking
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],  # Vue app
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 class PaymentDetails(BaseModel):
     number: str
