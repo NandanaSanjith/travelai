@@ -11,3 +11,6 @@ def is_valid_email(email: str) -> bool:
 
 def get_todays_date():
     return date.today()
+
+def convert_date_to_string(date_obj):
+    return date_obj.strftime("%Y-%m-%d")

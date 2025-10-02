@@ -1,8 +1,9 @@
 from .db_client import get_db_client
-from .utils import is_valid_email,get_todays_date
+from .utils import is_valid_email,get_todays_date,convert_date_to_string
 from fastapi import HTTPException
 import random
 import string
+
 
 
 def is_payment_valid(payment_details):
@@ -25,9 +26,9 @@ def create_booking(flight_id,
         raise HTTPException(status_code=400, detail="Email is not valid")
     if adults < 0:
         raise HTTPException(status_code=400, detail="number of passengers not valid")
-    if is_payment_valid(payment_details):
+    if not is_payment_valid(payment_details):
         raise HTTPException(status_code=400, detail="Payment is not valid")
-    if is_seat_available(adults):
+    if not is_seat_available(adults):
         raise HTTPException(status_code=400, detail="seats not available")
     booking_id=generate_booking_id()
     db=get_db_client()
@@ -35,8 +36,8 @@ def create_booking(flight_id,
      "booking_id": booking_id,
      "name": name,
      "email": email,
-     "booking_date": get_todays_date(),
-     "total_passengers": adults,
+     "booking_date": convert_date_to_string(get_todays_date()),
+    "total_passengers": adults,
      "flight_id": flight_id
     }
 
