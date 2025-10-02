@@ -1,8 +1,3 @@
-<script setup>
-import SearchBar from './components/SearchBar.vue';
-import FlightListView from './components/FlightListView.vue';
-</script>
-
 <template>
   <v-app >
     <v-app-bar :elevation="2">
@@ -21,7 +16,10 @@ import FlightListView from './components/FlightListView.vue';
     
     <v-main>
       <search-bar />
-      <flight-list-view />
+      <flight-list-view
+        start-date="2025-10-01"
+        end-date="2025-10-02"
+      />
       
     </v-main>
     
@@ -29,3 +27,8 @@ import FlightListView from './components/FlightListView.vue';
     
   </v-app>
 </template>
+
+<script setup>
+import SearchBar from './components/SearchBar.vue';
+import FlightListView from './components/FlightListView.vue';
+</script>
