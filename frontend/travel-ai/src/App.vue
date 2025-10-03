@@ -18,6 +18,7 @@
       <search-bar @on-search="onSearchEvent"/>
       <flight-list-view
         ref="flightListView"
+        class="mt-4"
       />
       
     </v-main>

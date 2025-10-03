@@ -1,27 +1,25 @@
 <template>
- <v-list lines="one">
+ 
   <v-card 
     v-for="flight in flightDetails"
     :key="flight.id"
-    elevation="16"
-    class="ma-2 pa-4"
+    elevation="2"
+    class="my-2 py-4"
    >
-   <v-list-item >
+   
        {{ flight.airline}}
        {{ flight.departure_date }}
        {{ flight.departure_city }}
        {{ flight.arrival_city }}
        {{ flight.price }}
        {{ flight.available_seats }}
-    </v-list-item>
+       <v-btn color="primary">Book</v-btn>
+    
    </v-card> 
- </v-list>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
-
-
 const flightDetails = ref([]);
 
 const fetchFlightDetails = async (sourceCity,destCity,startDate) => { 
