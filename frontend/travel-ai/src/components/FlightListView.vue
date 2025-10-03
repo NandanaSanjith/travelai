@@ -8,8 +8,11 @@
    >
    <v-list-item >
        {{ flight.airline}}
-       {{ startDate }}
-       {{ endDate }}
+       {{ flight.departure_date }}
+       {{ flight.departure_city }}
+       {{ flight.arrival_city }}
+       {{ flight.price }}
+       {{ flight.available_seats }}
     </v-list-item>
    </v-card> 
  </v-list>
@@ -18,25 +21,23 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 
-defineProps({
-  startDate: String,
-  endDate:String
-})
 
 const flightDetails = ref([]);
 
-const fetchFlightDetails = async () => { 
-  const response = await fetch('http://127.0.0.1:8000/flights?src_city=kochi&dest_city=bangalore&start_date=2025-09-30'); 
+const fetchFlightDetails = async (sourceCity,destCity,startDate) => { 
+  const url = `http://127.0.0.1:8000/flights?src_city=${sourceCity}&dest_city=${destCity}&start_date=${startDate}`
+
+  const response = await fetch(url); 
   if (!response.ok) {
       console.error("failed to fetch data")
     }
     flightDetails.value = await response.json();
 }
 
-onMounted(() => {
-  fetchFlightDetails();
-});
-
+const onSearchChanged = async(sourceCity,destCity,startDate) => {
+  fetchFlightDetails(sourceCity,destCity,startDate);
+};
+defineExpose({ onSearchChanged })
 </script>
 
 <style>

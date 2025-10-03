@@ -15,10 +15,9 @@
     </v-app-bar>
     
     <v-main>
-      <search-bar />
+      <search-bar @on-search="onSearchEvent"/>
       <flight-list-view
-        start-date="2025-10-01"
-        end-date="2025-10-02"
+        ref="flightListView"
       />
       
     </v-main>
@@ -29,6 +28,12 @@
 </template>
 
 <script setup>
+import { ref} from "vue"
 import SearchBar from './components/SearchBar.vue';
 import FlightListView from './components/FlightListView.vue';
+const flightListView=ref(null)
+
+const onSearchEvent = (query) => {
+  flightListView.value.onSearchChanged(query.sourceCity,query.destCity,query.date)
+}
 </script>
