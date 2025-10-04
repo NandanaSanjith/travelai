@@ -15,12 +15,21 @@
     </v-app-bar>
     
     <v-main>
-      <search-bar @on-search="onSearchEvent"/>
-      <flight-list-view
-        ref="flightListView"
-        class="mt-4"
-      />
-      
+      <div
+       v-if="!canShowBookingView"
+      >
+       <search-bar @on-search="onSearchEvent"/>
+       <flight-list-view
+         ref="flightListView"
+         class="mt-4"
+         @show-booking-view="onShowBookingView"
+        />
+      </div>
+
+      <booking-view 
+        v-if="canShowBookingView"
+      >
+      </booking-view>
     </v-main>
     
     
@@ -32,9 +41,15 @@
 import { ref} from "vue"
 import SearchBar from './components/SearchBar.vue';
 import FlightListView from './components/FlightListView.vue';
+import BookingView from "./components/BookingView.vue";
 const flightListView=ref(null)
+const canShowBookingView=ref(false)
 
 const onSearchEvent = (query) => {
   flightListView.value.onSearchChanged(query.sourceCity,query.destCity,query.date)
 }
+const onShowBookingView = () => {
+  canShowBookingView.value=true
+}
+
 </script>
