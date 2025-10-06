@@ -31,15 +31,26 @@ def get_flights(src_city: str,
     return response.json()
 
 @mcp.tool()
-def book_flight(flight_number: str,
-                start_date: str,
-                adults)  -> Dict[str, Any]:
+def book_flight(flight_id: str,
+                name: str,
+                adults: int,
+                email: str,
+                credit_card_number : str,
+                credit_card_holder_name : str,
+                expiry_date : str,
+                cvv : str
+                )  -> Dict[str, Any]:
     """Book a flight
         Args:
-            flight_number (str, required): Flight number
-            start_date (str, required):  Start date of the journey
-            adults (int, optional): Number of adults. Defaults to 1.
+            flight_id (str, required): Flight number
+            name (str, required):  Name of the person who is booking
+            email (str, required):  email of the person who is booking
+            adults (int, required): Number of adults. Defaults to 1.
+            credit_card_number(str, required) : Creditcard number used for booking
+            credit_card_holder_name(str, required) : person who owns the creditcard
+            expiry_date(str, required) : expiry date of creditcard
     """
+
     params = {
         "flight_number": flight_number,
         "start_date": start_date,
