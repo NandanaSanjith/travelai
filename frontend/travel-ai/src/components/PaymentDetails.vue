@@ -33,7 +33,12 @@
 </template>
 
 <script setup>
- import {ref} from 'vue'
+ import {ref,defineEmits} from 'vue'
+ const emit = defineEmits(['update:paymentName',
+  'update:creditCardNumber',
+  'update:cvv',
+  'update:expiryDate'])
+
  defineProps({
    paymentName:String ,
    creditCardNumber:String,

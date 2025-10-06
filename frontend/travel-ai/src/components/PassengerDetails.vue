@@ -20,7 +20,9 @@
 </template>
 
 <script setup>
- import {ref} from 'vue'
+ import {ref,defineEmits} from 'vue'
+ const emit = defineEmits(['update:name', 'update:email'])
+
  defineProps({
     name:String ,
     email:String
