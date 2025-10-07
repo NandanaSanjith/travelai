@@ -49,14 +49,22 @@ def book_flight(flight_id: str,
             credit_card_number(str, required) : Creditcard number used for booking
             credit_card_holder_name(str, required) : person who owns the creditcard
             expiry_date(str, required) : expiry date of creditcard
+            cvv(str,required): 3 digit number behind the credit card
     """
 
     params = {
-        "flight_number": flight_number,
-        "start_date": start_date,
-        "adults": adults
+        "flight_id": flight_id,
+        "name": name,
+        "adults": adults,
+        "email" : email,
+        "payment_details" : {
+            "number": credit_card_number,
+            "name": credit_card_holder_name,
+            "expiry_date": expiry_date,
+            "cvv": cvv
+        }
     }
-    response = requests.get("http://localhost:8000/book_flight", params=params)
+    response = requests.post("http://localhost:8000/book_flight", json=params)
     response.raise_for_status()
     return response.json()
 
