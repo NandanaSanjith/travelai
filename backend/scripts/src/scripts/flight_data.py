@@ -3,7 +3,9 @@ from datetime import datetime, timedelta
 import random
 
 def get_flights(src_city: str,
+                src_city_iata: str,
                 dest_city: str,
+                dest_city_iata: str,
                 start_date: str,
                 ) -> List[Dict[str, Any]]:
     """
@@ -59,8 +61,10 @@ def get_flights(src_city: str,
             flight = {
                 "airline": airline,
                 "flight_id": flight_number,
-                "departure_city": src_city.upper(),
-                "arrival_city": dest_city.upper(),
+                "departure_city": src_city.lower(),
+                "departure_city_iata": src_city_iata.lower(),
+                "arrival_city": dest_city.lower(),
+                "arrival_city_iata": dest_city_iata.lower(),
                 "departure_date": date_str,
                 "departure_time": departure_time,
                 "arrival_date": date_str,
