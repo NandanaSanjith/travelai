@@ -16,10 +16,29 @@ def read_data():
     for flight in flights:
         print(flight)
 
+def get_airport():
+    client = MongoClient("mongodb://localhost:27017/")  # or your connection URI
+    db = client["travel_ai"]
+    collection = db["airports"]
+    airports = list(collection.find({}, {"_id": 0}))
+    return airports
+
+def clear_flight_details():
+    client = MongoClient("mongodb://localhost:27017/")
+    db = client["travel_ai"]
+    collection = db["flight_details"]
+    collection.delete_many({})
 
 if __name__ == "__main__":
-    print("injest")
-    ingest(source='kochi',destination='bangalore',date='2025-09-29')
+    print("starting injestion")
+    clear_flight_details()
+    airports= get_airport()
+    for src_airport in airports:
+        for dest_airport in airports:
+            if src_airport["name"] != dest_airport["name"]:
+                print("injesting data : %s,%s" %( src_airport["name"],dest_airport["name"]))
+                ingest(source=src_airport["name"],destination= dest_airport["name"],date='2025-10-08')
+                
     #read_data()
        
 
