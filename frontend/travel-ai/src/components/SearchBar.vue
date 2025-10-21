@@ -1,5 +1,5 @@
 <template> 
-  <v-card elevation="8" class="pa-4 d-flex align-center" style="border-radius: 14px;">
+  <v-card elevation="8" class="pa-4 d-flex " style="border-radius: 14px;">
       <v-select
         v-model="travelType"
         :items="['Flight', 'Train', 'Bus']"
