@@ -1,10 +1,10 @@
 from .db_client import get_db_client
 
-def read_flight_data(departure_city,arrival_city,start_date):
+def read_flight_data(departure_city_iata,arrival_city_iata,start_date):
     db = get_db_client()
     flights = db.flight_details.find({
-     "arrival_city": { "$regex": arrival_city, "$options": "i" },
-     "departure_city": { "$regex": departure_city, "$options": "i" },
+     "arrival_city_iata": { "$regex": arrival_city_iata, "$options": "i" },
+     "departure_city_iata": { "$regex": departure_city_iata, "$options": "i" },
      "departure_date": start_date
      }) 
 
