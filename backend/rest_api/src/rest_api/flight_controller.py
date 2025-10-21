@@ -12,6 +12,15 @@ def read_flight_data(departure_city,arrival_city,start_date):
     return [_serialize_flight(f) for f in flights]
 
 def _serialize_flight(flight):
-    print(flight)
     flight["_id"] = str(flight["_id"])
     return flight
+
+def get_airports():
+    db = get_db_client()
+    airports = db.airports.find()
+    return [_serialize_airport(a) for a in airports]
+
+def _serialize_airport(airport):
+    airport["_id"] = str(airport["_id"])
+    return airport
+

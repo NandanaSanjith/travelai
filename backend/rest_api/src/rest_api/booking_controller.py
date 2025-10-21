@@ -40,7 +40,7 @@ def create_booking(flight_id,
     "total_passengers": adults,
      "flight_id": flight_id
     }
-
+    
     db["booking_details"].insert_one(booking)
     return {"status": "success", "booking_id": booking_id}
 

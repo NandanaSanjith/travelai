@@ -38,7 +38,7 @@ if __name__ == "__main__":
                        src_iata=src_airport["iata_code"],
                        destination= dest_airport["municipality"],
                        dest_iata=dest_airport["iata_code"],
-                       date='2025-10-08')
+                       date='2025-10-21')
                 
     #read_data()
        

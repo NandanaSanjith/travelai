@@ -7,8 +7,8 @@ def is_none(value):
   return value==None or pd.isna(value)
 
 def injest_airport_data():
- url = "https://ourairports.com/data/airports.csv"
- df = pd.read_csv(url)
+ filename = "airports.csv"
+ df = pd.read_csv(filename)
 
  indian_airports = df[(df["iso_country"] == "IN") & (pd.notna(df["iata_code"])) & (pd.notna(df["municipality"]))][["name", "municipality", "iata_code", "type"]]
  records = indian_airports.to_dict(orient="records")

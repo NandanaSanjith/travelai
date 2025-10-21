@@ -2,7 +2,7 @@ from typing import Union
 from pydantic import BaseModel
 
 from fastapi import FastAPI
-from .flight_controller import read_flight_data
+from .flight_controller import read_flight_data,get_airports
 from .booking_controller import create_booking
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -51,4 +51,9 @@ def change_booking(flight_number: str,
                 start_date: str,
                 adults):
     return {"status": "success", "booking_id": "123456"}
+
+@app.get("/airports")
+def airports():
+    return get_airports()
+
 
