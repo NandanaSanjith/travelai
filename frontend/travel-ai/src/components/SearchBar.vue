@@ -74,8 +74,8 @@ import { ref, defineEmits} from "vue"
 // define the events this component can emit
 const emit = defineEmits(['onSearch'])
 const travelType = ref("Flight")
-const sourceCity = ref("")
-const destCity = ref("")
+const sourceCity = ref(null)
+const destCity = ref(null)
 const date = ref("")
 
 const section = ref(null)
