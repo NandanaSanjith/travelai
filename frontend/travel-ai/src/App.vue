@@ -18,7 +18,10 @@
       <div
        v-if="!canShowBookingView"
       >
-       <search-bar @on-search="onSearchEvent"/>
+       <search-bar
+        :airports="airports"
+        @on-search="onSearchEvent"/>
+        
        <flight-list-view
          ref="flightListView"
          class="mt-4"
