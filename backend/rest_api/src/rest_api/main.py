@@ -2,8 +2,9 @@ from typing import Union
 from pydantic import BaseModel
 
 from fastapi import FastAPI
-from .flight_controller import read_flight_data,get_airports
-from .booking_controller import create_booking
+from .flight_controller import read_flight_data,get_airports,get_flight_details
+from .booking_controller import create_booking,generate_booking_id
+from .payment_controller import create_order
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
@@ -29,6 +30,13 @@ class BookingDetails(BaseModel):
     email: str
     payment_details:PaymentDetails
 
+
+class StartBookingDetails(BaseModel):
+    id: str
+    name: str
+    adults: int
+    email: str
+
 @app.get("/flights")
 def get_flights(src_city: str,
                 dest_city: str,
@@ -51,6 +59,14 @@ def change_booking(flight_number: str,
                 start_date: str,
                 adults):
     return {"status": "success", "booking_id": "123456"}
+
+@app.post("/start_booking")
+def start_booking(booking_details:StartBookingDetails):
+    booking_id=generate_booking_id()
+    flight_details=get_flight_details(booking_details.id)
+    amount_in_rupee=flight_details["price"]*booking_details.adults
+    payment_session=create_order(amount_in_rupee)
+    return {"booking_id": booking_id,"payment_session": payment_session}
 
 @app.get("/airports")
 def airports():
