@@ -3,8 +3,8 @@ from pydantic import BaseModel
 
 from fastapi import FastAPI
 from .flight_controller import read_flight_data,get_airports,get_flight_details
-from .booking_controller import create_booking,generate_booking_id
-from .payment_controller import create_order
+from .booking_controller import create_booking,generate_booking_id,insert_booking
+from .payment_controller import create_order,insert_payment_record
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
@@ -66,7 +66,12 @@ def start_booking(booking_details:StartBookingDetails):
     flight_details=get_flight_details(booking_details.id)
     amount_in_rupee=flight_details["price"]*booking_details.adults
     payment_session=create_order(amount_in_rupee)
+    insert_booking(booking_id,booking_details.name,booking_details.email,
+                   payment_session["payment_id"],booking_details.adults,booking_details.id)
+    insert_payment_record(payment_session["payment_id"],booking_id,"pending",payment_session["url"])
     return {"booking_id": booking_id,"payment_session": payment_session}
+
+
 
 @app.get("/airports")
 def airports():

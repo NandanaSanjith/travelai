@@ -1,6 +1,7 @@
 import stripe
 import os
 from dotenv import load_dotenv
+from .db_client import get_db_client
 from fastapi import HTTPException
 
 load_dotenv()
@@ -24,6 +25,16 @@ def create_order(total_amount_rupee):
             success_url="http://localhost:5173/success",
             cancel_url="http://localhost:5173/cancel",
         )
-        return {"url": session.url}
+        return {"url": session.url,"payment_id":session.id}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
+
+def insert_payment_record(id,booking_id,payment_status,url):
+    db=get_db_client()
+    payment = { 
+     "payment_id": id,
+     "payment_status":payment_status,
+     "booking_id":booking_id,
+     "url":url
+    }
+    db["payment_details"].insert_one(payment)
