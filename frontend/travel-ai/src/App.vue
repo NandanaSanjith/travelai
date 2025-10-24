@@ -31,6 +31,9 @@
 
       <booking-view 
         v-if="canShowBookingView"
+        :flight="selectedFlight"
+        class="mx-auto"
+        style="width:720px"
       >
       </booking-view>
     </v-main>
@@ -48,11 +51,13 @@ import BookingView from "./components/BookingView.vue";
 const flightListView=ref(null)
 const canShowBookingView=ref(false)
 const airports=ref([])
+const selectedFlight=ref(null)
 
 const onSearchEvent = (query) => {
   flightListView.value.onSearchChanged(query.sourceCity,query.destCity,query.date)
 }
-const onShowBookingView = () => {
+const onShowBookingView = (flight) => {
+  selectedFlight.value = flight
   canShowBookingView.value=true
 }
 
