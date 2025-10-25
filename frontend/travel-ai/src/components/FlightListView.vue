@@ -2,7 +2,7 @@
   <v-container class="py-6">
     <v-row justify="center" dense>
       <v-col
-        v-for="flight in flightDetails"
+        v-for="flight in props.flightList"
         :key="flight.id"
         cols="12"
         md="8"
@@ -73,24 +73,10 @@
 
 <script setup>
 import { ref, defineEmits } from 'vue';
-
-const flightDetails = ref([]);
 const emit = defineEmits(['showBookingView']);
-
-const fetchFlightDetails = async (sourceCity, destCity, startDate) => {
-  try {
-    const url = `http://127.0.0.1:8000/flights?src_city=${sourceCity}&dest_city=${destCity}&start_date=${startDate}`;
-    const response = await fetch(url);
-    if (!response.ok) throw new Error('Failed to fetch flight data');
-    flightDetails.value = await response.json();
-  } catch (err) {
-    console.error(err.message);
-  }
-};
-
-const onSearchChanged = async (sourceCity, destCity, startDate) => {
-  await fetchFlightDetails(sourceCity, destCity, startDate);
-};
+const props = defineProps({
+    flightList: Array ,
+ })
 
 const onClickEvent = (flight) => {
   emit('showBookingView', flight);
@@ -99,13 +85,11 @@ const onClickEvent = (flight) => {
 // Airline logos mapping
 const getAirlineLogo = (airline) => {
   const logos = {
-    'IndiGo': 'https://upload.wikimedia.org/wikipedia/commons/8/83/IndiGo_Logo.svg',
-    'Air India': 'https://upload.wikimedia.org/wikipedia/en/3/30/Air_India_Logo.svg',
-    'SpiceJet': 'https://upload.wikimedia.org/wikipedia/en/d/d1/SpiceJet_logo.svg',
-    'AirAsia': 'https://upload.wikimedia.org/wikipedia/commons/1/1e/AirAsia_New_Logo.svg',
+    'IndiGo': '../assets/indigo.svg',
+    'Air India': '../assets/Air_India.svg',
+    'SpiceJet': '../assets/SpiceJet_logo.svg',
+    'AirAsia': '../assets/AirAsia_New_Logo.svg',
   };
   return logos[airline] || 'https://cdn-icons-png.flaticon.com/512/3076/3076129.png'; // default airplane icon
 };
-
-defineExpose({ onSearchChanged });
 </script>

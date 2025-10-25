@@ -60,8 +60,15 @@
 
       <v-text-field v-model="date" type="date" label="Date" variant="outlined" class="mx-2" />
 
-      <v-btn color="primary" class="ml-3 px-6" height="56" @click="handleSearch">
-        🔍 Search
+      <v-btn
+        color="primary"
+        class="ml-3 px-6"
+        height="56"
+        :loading="props.isLoading"
+        @click="handleSearch"
+        prepend-icon="mdi-magnify"
+      >
+        Search
       </v-btn>
   </v-card>
 
@@ -81,7 +88,12 @@ const date = ref("")
 const section = ref(null)
 
 const props = defineProps({
-    airports: Array 
+    airports: Array,
+    isLoading: {
+      type: Boolean,
+      default: false
+    }
+
  })
 
 const handleSearch = () => {
