@@ -16,8 +16,7 @@
     </v-app-bar>
     
     <v-main>
-      <SplashScreen v-if="loading" />
-    <router-view v-else />
+    <router-view  />
     </v-main>
     
     

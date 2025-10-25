@@ -40,9 +40,14 @@
                 Back
               </v-btn>
               <v-spacer></v-spacer>
-              <v-btn color="primary" @click="onConfirmBooking">
-                Pay & Confirm
-              </v-btn>
+              <v-btn
+                    color="primary"
+                    :loading="isPaying"
+                    :disabled="isPaying"
+                    @click="onConfirmBooking"
+                  >
+                    Pay & Confirm
+                  </v-btn>
             </v-card-actions>
           </v-card>
         </v-stepper-window-item>
@@ -66,8 +71,10 @@ const step = ref(1);
 const name = ref("");
 const email = ref("");
 const totalPayment = ref(0)
+const isPaying=ref(false)
 
 const onConfirmBooking = async () => {
+  isPaying.value=true
   const res = await fetch("http://127.0.0.1:8000/start_booking", {
     method: "POST",
     headers: {
@@ -84,7 +91,7 @@ const onConfirmBooking = async () => {
 
   if (!res.ok) throw new Error("Network response was not ok");
   const data = await res.json();
-  console.log(data);
+
   window.location.href=data.payment_session.url
 };
 </script>
