@@ -4,9 +4,17 @@ import os
 from dotenv import load_dotenv
 from fastapi import FastAPI, Request, HTTPException
 import stripe
-from .flight_controller import read_flight_data,get_airports,get_flight_details
-from .booking_controller import create_booking,generate_booking_id,insert_booking
-from .payment_controller import create_order,insert_payment_record
+from .flight_controller import (read_flight_data,
+                                get_airports,
+                                get_flight_details,
+                                update_available_seats)
+from .booking_controller import (create_booking,
+                                 generate_booking_id,
+                                 insert_booking,
+                                 update_booking_status)
+from .payment_controller import (create_order,
+                                 insert_payment_record,
+                                 update_payment_status)
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
@@ -75,7 +83,10 @@ def start_booking(booking_details:StartBookingDetails):
     insert_booking(booking_id,booking_details.name,booking_details.email,
                    payment_session["payment_id"],booking_details.adults,booking_details.id)
     insert_payment_record(payment_session["payment_id"],booking_id,"pending",payment_session["url"])
+    available_seats=flight_details["available_seats"]-booking_details.adults
+    update_available_seats(booking_details.id,available_seats)
     return {"booking_id": booking_id,"payment_session": payment_session}
+
 
 
 
@@ -96,14 +107,20 @@ async def stripe_webhook(request: Request):
         raise HTTPException(status_code=400, detail="Invalid payload")
     except stripe.error.SignatureVerificationError:
         raise HTTPException(status_code=400, detail="Invalid signature")
-
+    
+    session = event['data']['object']
+    session_id=session["id"]
+    booking_id=session.get("metadata",{}).get("booking_id")
+    print(session_id,booking_id)
     # ✅ Handle events
     if event['type'] == 'checkout.session.completed':
-        session = event['data']['object']
         print("💰 Payment was successful!")
-        # You can update your database here
+        update_booking_status(booking_id,"success")
+        update_payment_status(session_id,"success")
 
-    elif event['type'] == 'payment_intent.payment_failed':
+    elif (event['type'] == 'payment_intent.payment_failed' or
+        event['type']=='checkout.session.expired'):
         print("❌ Payment failed!")
-
+        update_booking_status(booking_id,"failed")
+        update_payment_status(session_id,"failed")
     return {"status": "success"}

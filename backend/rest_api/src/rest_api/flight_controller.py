@@ -30,3 +30,8 @@ def get_flight_details(id):
     flight=db.flight_details.find_one({"_id": ObjectId(id)})
     return _serialize_flight(flight)
 
+def update_available_seats(id,available_seats):
+    db = get_db_client()
+    db.flight_details.update_one({"_id": ObjectId(id)},
+                                  {"$set": {"available_seats": available_seats}})
+    

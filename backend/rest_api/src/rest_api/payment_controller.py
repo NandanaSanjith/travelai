@@ -1,5 +1,6 @@
 import stripe
 import os
+import time
 from dotenv import load_dotenv
 from .db_client import get_db_client
 from fastapi import HTTPException
@@ -13,6 +14,7 @@ endpoint_secret = os.getenv("STRIPE_WEBHOOK_SECRET")
 def create_order(total_amount_rupee,booking_id):
     try:
         total_amount_paise=total_amount_rupee*100
+        expire_time = int(time.time()) + (30 * 60)
         session = stripe.checkout.Session.create(
             payment_method_types=["card"],
             mode="payment",
@@ -26,6 +28,10 @@ def create_order(total_amount_rupee,booking_id):
             }],
             success_url=f"http://localhost:5173/success?booking_id={booking_id}",
             cancel_url=f"http://localhost:5173/cancel?booking_id={booking_id}",
+            expires_at=expire_time,
+            metadata={
+                "booking_id": booking_id,
+            }
         )
         return {"url": session.url,"payment_id":session.id}
     except Exception as e:
@@ -40,3 +46,8 @@ def insert_payment_record(id,booking_id,payment_status,url):
      "url":url
     }
     db["payment_details"].insert_one(payment)
+
+def update_payment_status(id,payment_status):
+    db=get_db_client()
+    db.payment_details.update_one({"payment_id": id},
+                                  {"$set": {"payment_status": payment_status}})

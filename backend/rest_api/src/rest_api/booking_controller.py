@@ -1,8 +1,10 @@
 from .db_client import get_db_client
 from .utils import is_valid_email,get_todays_date,convert_date_to_string
+from bson import ObjectId
 from fastapi import HTTPException
 import random
 import string
+
 
 
 
@@ -15,6 +17,11 @@ def is_seat_available(total_seats):
 def generate_booking_id(length=8):
     chars = string.ascii_uppercase + string.digits
     return ''.join(random.choices(chars, k=length))
+
+def update_booking_status(id,booking_status):
+    db=get_db_client()
+    db.booking_details.update_one({"booking_id": id},
+                                  {"$set": {"booking_status": booking_status}})
 
 
 def create_booking(flight_id,
