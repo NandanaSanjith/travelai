@@ -10,7 +10,7 @@ endpoint_secret = os.getenv("STRIPE_WEBHOOK_SECRET")
 
 
 
-def create_order(total_amount_rupee):
+def create_order(total_amount_rupee,booking_id):
     try:
         total_amount_paise=total_amount_rupee*100
         session = stripe.checkout.Session.create(
@@ -24,8 +24,8 @@ def create_order(total_amount_rupee):
                 },
                 "quantity": 1,
             }],
-            success_url="http://localhost:5173/success",
-            cancel_url="http://localhost:5173/cancel",
+            success_url=f"http://localhost:5173/success?booking_id={booking_id}",
+            cancel_url=f"http://localhost:5173/cancel?booking_id={booking_id}",
         )
         return {"url": session.url,"payment_id":session.id}
     except Exception as e:

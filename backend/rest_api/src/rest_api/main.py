@@ -71,7 +71,7 @@ def start_booking(booking_details:StartBookingDetails):
     booking_id=generate_booking_id()
     flight_details=get_flight_details(booking_details.id)
     amount_in_rupee=flight_details["price"]*booking_details.adults
-    payment_session=create_order(amount_in_rupee)
+    payment_session=create_order(amount_in_rupee,booking_id)
     insert_booking(booking_id,booking_details.name,booking_details.email,
                    payment_session["payment_id"],booking_details.adults,booking_details.id)
     insert_payment_record(payment_session["payment_id"],booking_id,"pending",payment_session["url"])
