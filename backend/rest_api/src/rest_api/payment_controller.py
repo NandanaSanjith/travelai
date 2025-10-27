@@ -6,6 +6,8 @@ from fastapi import HTTPException
 
 load_dotenv()
 stripe.api_key = os.getenv("STRIPE_API_KEY")
+endpoint_secret = os.getenv("STRIPE_WEBHOOK_SECRET")
+
 
 
 def create_order(total_amount_rupee):

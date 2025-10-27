@@ -1,13 +1,19 @@
 from typing import Union
 from pydantic import BaseModel
-
-from fastapi import FastAPI
+import os
+from dotenv import load_dotenv
+from fastapi import FastAPI, Request, HTTPException
+import stripe
 from .flight_controller import read_flight_data,get_airports,get_flight_details
 from .booking_controller import create_booking,generate_booking_id,insert_booking
 from .payment_controller import create_order,insert_payment_record
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+load_dotenv()
+stripe.api_key = os.getenv("STRIPE_API_KEY")
+endpoint_secret = os.getenv("STRIPE_WEBHOOK_SECRET")
+
 
 app.add_middleware(
     CORSMiddleware,
@@ -77,4 +83,27 @@ def start_booking(booking_details:StartBookingDetails):
 def airports():
     return get_airports()
 
+@app.post("/webhook")
+async def stripe_webhook(request: Request):
+    payload = await request.body()
+    sig_header = request.headers.get('stripe-signature')
 
+    try:
+        event = stripe.Webhook.construct_event(
+            payload, sig_header, endpoint_secret
+        )
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Invalid payload")
+    except stripe.error.SignatureVerificationError:
+        raise HTTPException(status_code=400, detail="Invalid signature")
+
+    # ✅ Handle events
+    if event['type'] == 'checkout.session.completed':
+        session = event['data']['object']
+        print("💰 Payment was successful!")
+        # You can update your database here
+
+    elif event['type'] == 'payment_intent.payment_failed':
+        print("❌ Payment failed!")
+
+    return {"status": "success"}
