@@ -1,13 +1,15 @@
 <template> 
-  <v-card elevation="8" class="pa-4 d-flex " style="border-radius: 14px;">
-      <v-select
-        v-model="travelType"
-        :items="['Flight', 'Train', 'Bus']"
-        label="Mode"
-        variant="outlined"
-        class="mx-2"
-      />
+  <v-card elevation="8" class="pa-4 d-flex flex-wrap" style="border-radius: 14px;">
+    <v-select
+      v-model="travelType"
+      :items="['Flight', 'Train', 'Bus']"
+      label="Mode"
+      variant="outlined"
+      class="mx-2"
+      style="min-width: 130px;"
+    />
 
+<<<<<<< HEAD
       <v-autocomplete
         v-model="sourceCity"
         :items="props.airports"
@@ -206,89 +208,131 @@ const customFilter = (value, query, item) => {
         style="min-width: 250px;"
       >
        <template #item="{ props: itemProps, item }">
+=======
+    <v-autocomplete
+      v-model="sourceCity"
+      :items="props.airports"
+      :custom-filter="customFilter"
+      item-title="name"
+      item-value="iata_code"
+      clearable
+      label="From"
+      variant="outlined"
+      class="mx-2 flex-grow-1"
+      style="min-width: 200px;"
+    >
+      <template #item="{ props: itemProps, item }">
+>>>>>>> 0cea7a0d5e70efe1e1a48a5b150d3e0e964288ba
         <v-list-item v-bind="itemProps" :title="null" :subtitle="null">
           <v-list-item-title style="font-weight: bold;">{{ item.raw.name }}</v-list-item-title>
           <v-list-item-subtitle style="font-size: 0.85em; color: gray;">
-              {{ item.raw.municipality }} - {{ item.raw.iata_code }}
+            {{ item.raw.municipality }} - {{ item.raw.iata_code }}
           </v-list-item-subtitle>
         </v-list-item>
-       </template>
-       <template #selection="{ item }">
-          {{ item.raw.municipality }} ({{item.raw.iata_code}})
-       </template> 
-      </v-autocomplete>
+      </template>
 
-      <v-autocomplete
-        v-model="destCity"
-        :items="props.airports"
-        :custom-filter="customFilter"
-        item-title="name"
-        item-value="iata_code"
-        clearable
-        label="To"
-        variant="outlined"
-        class="mx-2 flex-grow-1"
-        style="min-width: 250px;"
-      >
-       <template #item="{ props: itemProps, item }">
+      <template #selection="{ item }">
+        {{ item.raw.municipality }} ({{ item.raw.iata_code }})
+      </template> 
+    </v-autocomplete>
+
+    <v-autocomplete
+      v-model="destCity"
+      :items="props.airports"
+      :custom-filter="customFilter"
+      item-title="name"
+      item-value="iata_code"
+      clearable
+      label="To"
+      variant="outlined"
+      class="mx-2 flex-grow-1"
+      style="min-width: 200px;"
+    >
+      <template #item="{ props: itemProps, item }">
         <v-list-item v-bind="itemProps" :title="null" :subtitle="null">
           <v-list-item-title style="font-weight: bold;">{{ item.raw.name }}</v-list-item-title>
           <v-list-item-subtitle style="font-size: 0.85em; color: gray;">
-              {{ item.raw.municipality }} - {{ item.raw.iata_code }}
+            {{ item.raw.municipality }} - {{ item.raw.iata_code }}
           </v-list-item-subtitle>
         </v-list-item>
-       </template>
-       <template #selection="{ item }">
-          {{ item.raw.municipality }} ({{item.raw.iata_code}})
-       </template> 
-      </v-autocomplete>
+      </template>
 
-      <v-text-field v-model="date" type="date" label="Date" variant="outlined" class="mx-2" />
+      <template #selection="{ item }">
+        {{ item.raw.municipality }} ({{ item.raw.iata_code }})
+      </template> 
+    </v-autocomplete>
 
-      <v-btn
-        color="primary"
-        class="ml-3 px-6"
-        height="56"
-        :loading="props.isLoading"
-        @click="handleSearch"
-        prepend-icon="mdi-magnify"
-      >
-        Search
-      </v-btn>
+    <v-text-field
+      v-model="date"
+      type="date"
+      label="Date"
+      variant="outlined"
+      class="mx-2"
+      style="min-width: 160px;"
+    />
+
+    <v-text-field
+      v-model="passengers"
+      type="number"
+      label="Passengers"
+      variant="outlined"
+      class="mx-2"
+      min="1"
+      style="max-width: 140px;"
+    />
+
+    <v-select
+      v-model="travelClass"
+      :items="['Economy', 'Business', 'First Class']"
+      label="Class"
+      variant="outlined"
+      class="mx-2"
+      style="min-width: 160px;"
+    />
+
+    <v-btn
+      color="primary"
+      class="ml-3 px-6"
+      height="56"
+      :loading="props.isLoading"
+      @click="handleSearch"
+      prepend-icon="mdi-magnify"
+    >
+      Search
+    </v-btn>
   </v-card>
-
-   
 </template>
 
 <script setup>
-import { ref, defineEmits} from "vue"
+import { ref, defineEmits } from "vue"
 
-// define the events this component can emit
 const emit = defineEmits(['onSearch'])
+
 const travelType = ref("Flight")
 const sourceCity = ref(null)
 const destCity = ref(null)
 const date = ref("")
-
-const section = ref(null)
+const passengers = ref(1)
+const travelClass = ref("Economy")
 
 const props = defineProps({
-    airports: Array,
-    isLoading: {
-      type: Boolean,
-      default: false
-    }
-
- })
+  airports: Array,
+  isLoading: {
+    type: Boolean,
+    default: false
+  }
+})
 
 const handleSearch = () => {
- //console.log(sourceCity.value,destCity.value,date.value)
- const query={
-  sourceCity: sourceCity.value,
-  destCity: destCity.value,
-  date: date.value
- }
- emit('onSearch', query)
+  const query = {
+    travelType: travelType.value,
+    sourceCity: sourceCity.value,
+    destCity: destCity.value,
+    date: date.value,
+    passengers: passengers.value,
+    travelClass: travelClass.value
+  }
+  emit('onSearch', query)
 }
 
 const customFilter = (value, query, item) => {
@@ -303,5 +347,9 @@ const customFilter = (value, query, item) => {
 }
 </script>
 
-<style>
+<style scoped>
+.v-card {
+  flex-wrap: wrap;
+  gap: 10px;
+}
 </style>
