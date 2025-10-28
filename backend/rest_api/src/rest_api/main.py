@@ -31,20 +31,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-class PaymentDetails(BaseModel):
-    number: str
-    name: str
-    expiry_date: str
-    cvv: str
-
-class BookingDetails(BaseModel):
-    flight_id: str
-    name: str
-    adults: int
-    email: str
-    payment_details:PaymentDetails
-
-
 class StartBookingDetails(BaseModel):
     id: str
     name: str
@@ -57,15 +43,6 @@ def get_flights(src_city: str,
                 start_date: str,
                 ):
     return read_flight_data(src_city, dest_city, start_date,)
-
-
-@app.post("/book_flight")
-def book_flight(booking_details:BookingDetails):
-    return create_booking(booking_details.flight_id,
-                booking_details.name,
-                booking_details.adults,
-                booking_details.email,
-                booking_details.payment_details)
 
 
 @app.get("/change_booking")

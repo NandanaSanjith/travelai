@@ -31,40 +31,33 @@ def get_flights(src_city_iata_code: str,
     return response.json()
 
 @mcp.tool()
-def book_flight(flight_id: str,
+def start_booking_flight(id: str,
                 name: str,
                 adults: int,
                 email: str,
-                credit_card_number : str,
-                credit_card_holder_name : str,
-                expiry_date : str,
-                cvv : str
                 )  -> Dict[str, Any]:
-    """Book a flight
+    """ This method will start a booking of flight and block the seats till the payment is done.
         Args:
-            flight_id (str, required): Flight number
+            id (str, required): _id recieved in get_flights method response
             name (str, required):  Name of the person who is booking
             email (str, required):  email of the person who is booking
             adults (int, required): Number of adults. Defaults to 1.
-            credit_card_number(str, required) : Creditcard number used for booking
-            credit_card_holder_name(str, required) : person who owns the creditcard
-            expiry_date(str, required) : expiry date of creditcard
-            cvv(str,required): 3 digit number behind the credit card
+        return:
+        dict
+            booking_id:an id indicating the booking
+            payment_session:a dictionary containing url and a payment session id.
+            Customer has to complete the payment using the url.
+            If the payment is not complete in 30 minutes the booking will be cancelled.
+            An email will be sent with the booking confirmation after the payment is done.
     """
 
     params = {
-        "flight_id": flight_id,
+        "id": id,
         "name": name,
         "adults": adults,
         "email" : email,
-        "payment_details" : {
-            "number": credit_card_number,
-            "name": credit_card_holder_name,
-            "expiry_date": expiry_date,
-            "cvv": cvv
-        }
     }
-    response = requests.post("http://localhost:8000/book_flight", json=params)
+    response = requests.post("http://localhost:8000/start_booking", json=params)
     response.raise_for_status()
     return response.json()
 
