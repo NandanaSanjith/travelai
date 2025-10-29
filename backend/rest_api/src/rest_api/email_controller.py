@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from fastapi import HTTPException 
 import requests
 from jinja2 import Environment, FileSystemLoader
+from .flight_controller import get_airports
 
 load_dotenv()
 ZOHO_API_KEY= os.getenv("ZOHO_API_KEY")
@@ -56,16 +57,20 @@ def _get_airport_name(airports, airport_code):
 def send_confirmation_email(booking_details,flight_details):
     if not booking_details or not flight_details:
         raise HTTPException(status_code=404, detail="Invalid input")
-    template = env.get_template('booking_confirmation.html')
+    airports=get_airports()
+    name=booking_details["name"]
+    email=booking_details["email"]
     template_variables={
-        'name':booking_details["name"],
-        'email':booking_details["email"],
+        'name':name,
+        'email':email,
         'booking_id':booking_details["booking_id"],
+        'booking_date':booking_details["booking_date"],
         'total_passengers':booking_details["total_passengers"],
 
         'flight_number':flight_details["flight_id"].upper(),
         'airline_name':flight_details["airline"].upper(),
-        'total_amount':flight_details["price"]*booking_details["total_passengers"]
+        'total_amount':flight_details["price"]*booking_details["total_passengers"],
+        
 
         # Departure details
         'departure_city': flight_details['departure_city'].upper(),
@@ -80,7 +85,8 @@ def send_confirmation_email(booking_details,flight_details):
         'arrival_airport': _get_airport_name(airports, flight_details['arrival_city_iata']),
         'arrival_time': flight_details['arrival_time'].upper(),
         'arrival_date': flight_details['arrival_date'].upper()
-
-
     }
 
+    template = env.get_template("booking_confirmation.html")
+    html_content = template.render(**template_variables)
+    send_email(email, name,f"Your flight Booking Confirmation - {booking_details['booking_id']}", html_content)

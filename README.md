@@ -28,9 +28,10 @@ bus booking
 ## Run Stripe
  - open terminal 
  - cd c:\stripe
- - stripe login (use nandanasanjith2175@gmail.com)
+ - stripe login 
  - stripe listen --forward-to localhost:8000/webhook
- - copy the "whsec_" key to .env
+ - copy the "whsec_" key to .env STRIPE_WEBHOOK_SECRET
+
 
 ## Run Frontend
  - open terminal 

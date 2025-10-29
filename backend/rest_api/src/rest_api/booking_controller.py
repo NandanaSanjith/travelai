@@ -23,6 +23,10 @@ def update_booking_status(id,booking_status):
     db.booking_details.update_one({"booking_id": id},
                                   {"$set": {"booking_status": booking_status}})
 
+def get_booking_details(id):
+    db=get_db_client()
+    return db["booking_details"].find_one({"booking_id":id})
+
 
 def create_booking(flight_id,
                 name,

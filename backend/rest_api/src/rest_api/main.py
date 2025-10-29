@@ -11,11 +11,12 @@ from .flight_controller import (read_flight_data,
 from .booking_controller import (create_booking,
                                  generate_booking_id,
                                  insert_booking,
-                                 update_booking_status)
+                                 update_booking_status,
+                                 get_booking_details)
 from .payment_controller import (create_order,
                                  insert_payment_record,
                                  update_payment_status)
-from .email_controller import (send_email)
+from .email_controller import (send_confirmation_email)
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
@@ -75,7 +76,9 @@ def airports():
 @app.get("/send_testmail")
 def send_test():
     print ("sent test")
-    return send_email("meghasudheer884@gmail.com", "MEGHA", "subject- test", "<html> First email </html>")
+    booking_details=get_booking_details("79K0APMD")
+    flight_details=get_flight_details(booking_details['flight_id'])
+    return send_confirmation_email(booking_details,flight_details)
 
 
 @app.post("/webhook")
@@ -99,9 +102,12 @@ async def stripe_webhook(request: Request):
     # ✅ Handle events
     if event['type'] == 'checkout.session.completed':
         print("💰 Payment was successful!")
+        booking_details=get_booking_details(booking_id)
+        flight_details=get_flight_details(booking_details["flight_id"])
         update_booking_status(booking_id,"success")
         update_payment_status(session_id,"success")
-
+        send_confirmation_email(booking_details,flight_details)
+        
     elif (event['type'] == 'payment_intent.payment_failed' or
         event['type']=='checkout.session.expired'):
         print("❌ Payment failed!")
