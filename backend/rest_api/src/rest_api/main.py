@@ -15,6 +15,7 @@ from .booking_controller import (create_booking,
 from .payment_controller import (create_order,
                                  insert_payment_record,
                                  update_payment_status)
+from .email_controller import (send_email)
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
@@ -70,6 +71,12 @@ def start_booking(booking_details:StartBookingDetails):
 @app.get("/airports")
 def airports():
     return get_airports()
+
+@app.get("/send_testmail")
+def send_test():
+    print ("sent test")
+    return send_email("meghasudheer884@gmail.com", "MEGHA", "subject- test", "<html> First email </html>")
+
 
 @app.post("/webhook")
 async def stripe_webhook(request: Request):
