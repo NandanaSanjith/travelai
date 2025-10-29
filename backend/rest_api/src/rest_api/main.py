@@ -33,6 +33,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+class ChatMessage(BaseModel):
+    message: str
+    reset_conversation: bool = False
+
 class StartBookingDetails(BaseModel):
     id: str
     name: str
@@ -80,6 +84,10 @@ def send_test():
     flight_details=get_flight_details(booking_details['flight_id'])
     return send_confirmation_email(booking_details,flight_details)
 
+@app.post("/chat")
+async def chat(chat_message: ChatMessage):
+    response="TestResponse"
+    return {"status": "Success", "response": response}
 
 @app.post("/webhook")
 async def stripe_webhook(request: Request):

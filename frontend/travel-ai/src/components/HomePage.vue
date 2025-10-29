@@ -28,6 +28,8 @@
         style="width:720px"
       >
       </booking-view>
+      <chat-widget>
+      </chat-widget>
       
 </template>
 <script setup>
@@ -35,6 +37,7 @@ import { ref,onMounted} from "vue"
 import SearchBar from './SearchBar.vue';
 import FlightListView from './FlightListView.vue';
 import BookingView from "./BookingView.vue";
+import ChatWidget from "./ChatWidget.vue";
 const flightListView=ref(null)
 const canShowBookingView=ref(false)
 const airports=ref([])
