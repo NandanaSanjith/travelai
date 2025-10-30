@@ -101,7 +101,6 @@ watch(messages, async () => {
 
 function scrollToBottom() {
   if (messagesContainer.value) {
-    console.error(messagesContainer.value, messagesContainer.value.scrollHeight)
     messagesContainer.value.scrollTop = messagesContainer.value.scrollHeight
   }
 }
@@ -159,6 +158,7 @@ async function sendMessage() {
     const data = await response.json()
     messages.value.push({ from: 'bot', text: data.response })
     resetConversation.value = false
+    console.log(data.response)
 
   } catch (error) {
     console.error('Chat error:', error)

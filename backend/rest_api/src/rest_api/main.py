@@ -17,13 +17,27 @@ from .payment_controller import (create_order,
                                  insert_payment_record,
                                  update_payment_status)
 from .email_controller import (send_confirmation_email)
+from .chat_controller import ClaudeClient
 from fastapi.middleware.cors import CORSMiddleware
+from contextlib import asynccontextmanager
+claude_chat_client=None
 
-app = FastAPI()
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    global claude_chat_client
+    # Startup
+    claude_chat_client = ClaudeClient()
+    await claude_chat_client.initialize()  # Make sure this is awaited
+    yield
+    # Shutdown
+    if claude_chat_client:
+        await claude_chat_client.close()  # Add a close method to clean up resources
+        print("Claude client shut down")
+
+app = FastAPI(lifespan=lifespan)
 load_dotenv()
 stripe.api_key = os.getenv("STRIPE_API_KEY")
 endpoint_secret = os.getenv("STRIPE_WEBHOOK_SECRET")
-
 
 app.add_middleware(
     CORSMiddleware,
@@ -63,6 +77,7 @@ def start_booking(booking_details:StartBookingDetails):
     flight_details=get_flight_details(booking_details.id)
     amount_in_rupee=flight_details["price"]*booking_details.adults
     payment_session=create_order(amount_in_rupee,booking_id)
+    print(payment_session["url"])
     insert_booking(booking_id,booking_details.name,booking_details.email,
                    payment_session["payment_id"],booking_details.adults,booking_details.id)
     insert_payment_record(payment_session["payment_id"],booking_id,"pending",payment_session["url"])
@@ -86,8 +101,10 @@ def send_test():
 
 @app.post("/chat")
 async def chat(chat_message: ChatMessage):
-    response="TestResponse"
-    return {"status": "Success", "response": response}
+    return await claude_chat_client.send_chat_message(chat_message.message,
+                                                      chat_message.reset_conversation)
+
+
 
 @app.post("/webhook")
 async def stripe_webhook(request: Request):
