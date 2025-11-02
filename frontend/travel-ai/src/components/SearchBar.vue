@@ -1,10 +1,9 @@
 <template>
   <div class="background-container">
-    <div class="overlay">
       <v-card
         elevation="10"
         class="search-card d-flex flex-wrap align-center"
-        style="border-radius: 16px;"
+        style="border-radius: 0px;"
       >
         <!-- Mode -->
         <v-select
@@ -24,13 +23,12 @@
           v-model="sourceCity"
           :items="props.airports"
           :custom-filter="customFilter"
-          item-title="name"
+          item-title="municipality"
           item-value="iata_code"
           clearable
           label="From"
           variant="outlined"
-          class="field flex-grow-1"
-          style="min-width: 240px;"
+          style="width: 240px;"
           hide-details
           rounded
           prepend-inner-icon="mdi-map-marker"
@@ -43,9 +41,6 @@
               </v-list-item-subtitle>
             </v-list-item>
           </template>
-          <template #selection="{ item }">
-            {{ item.raw.municipality }} ({{ item.raw.iata_code }})
-          </template>
         </v-autocomplete>
 
         <!-- To -->
@@ -53,13 +48,12 @@
           v-model="destCity"
           :items="props.airports"
           :custom-filter="customFilter"
-          item-title="name"
+          item-title="municipality"
           item-value="iata_code"
           clearable
           label="To"
           variant="outlined"
-          class="field flex-grow-1"
-          style="min-width: 240px;"
+          style="width: 240px;"
           hide-details
           rounded
           prepend-inner-icon="mdi-map-marker-radius"
@@ -71,9 +65,6 @@
                 {{ item.raw.municipality }} • {{ item.raw.iata_code }}
               </v-list-item-subtitle>
             </v-list-item>
-          </template>
-          <template #selection="{ item }">
-            {{ item.raw.municipality }} ({{ item.raw.iata_code }})
           </template>
         </v-autocomplete>
 
@@ -146,7 +137,6 @@
         </v-btn>
       </v-card>
     </div>
-  </div>
 </template>
 
 <script setup>
@@ -212,19 +202,9 @@ const customFilter = (value, query, item) => {
   background-image: url('https://i.pinimg.com/1200x/94/3c/ce/943cce9a94bc0296b52bf5a3360d6125.jpg');
   background-size: cover;
   background-position: center;
-  min-height: 100vh;
+  min-height: 340px;
   display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Light overlay (no blur) */
-.overlay {
-  background-color: rgba(255, 255, 255, 0);
-  width: 100%;
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
 }
 
@@ -238,10 +218,6 @@ const customFilter = (value, query, item) => {
   background: #ffffff;
   border-radius: 16px;
   transition: all 0.25s ease;
-}
-.search-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
 }
 
 /* Fields */
@@ -257,10 +233,9 @@ const customFilter = (value, query, item) => {
 
 /* Passengers */
 .passenger-box {
-  border-radius: 10px;
+  border-radius: 32px;
   padding: 6px 10px;
-  background: #f9fafb;
-  border: 1px solid rgba(16, 24, 40, 0.08);
+  border: 1px solid rgba(16, 24, 40, 0.3);
 }
 .passenger-label {
   font-size: 0.85rem;
@@ -270,7 +245,7 @@ const customFilter = (value, query, item) => {
 .passenger-btn {
   min-width: 36px;
   width: 36px;
-  height: 36px;
+  height: 30px;
   margin: 0 4px;
   color: #1f2937;
   transition: transform 0.12s ease;
