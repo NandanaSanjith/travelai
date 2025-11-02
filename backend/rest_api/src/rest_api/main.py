@@ -12,10 +12,12 @@ from .booking_controller import (create_booking,
                                  generate_booking_id,
                                  insert_booking,
                                  update_booking_status,
-                                 get_booking_details)
+                                 get_booking_details,
+                                 get_booking_details_json)
 from .payment_controller import (create_order,
                                  insert_payment_record,
-                                 update_payment_status)
+                                 update_payment_status,
+                                 get_payment_json)
 from .email_controller import (send_confirmation_email)
 from .chat_controller import ClaudeClient
 from fastapi.middleware.cors import CORSMiddleware
@@ -65,11 +67,12 @@ def get_flights(src_city: str,
     return read_flight_data(src_city, dest_city, start_date,)
 
 
-@app.get("/change_booking")
-def change_booking(flight_number: str,
-                start_date: str,
-                adults):
-    return {"status": "success", "booking_id": "123456"}
+@app.get("/booking")
+def booking(booking_id: str):
+    booking_details=get_booking_details_json(booking_id)
+    flight_details=get_flight_details(booking_details["flight_id"])
+    payment_details=get_payment_json(booking_details["payment_id"])
+    return {"booking_details": booking_details, "flight_details": flight_details, "payment_details": payment_details}  
 
 @app.post("/start_booking")
 def start_booking(booking_details:StartBookingDetails):

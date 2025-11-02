@@ -51,3 +51,12 @@ def update_payment_status(id,payment_status):
     db=get_db_client()
     db.payment_details.update_one({"payment_id": id},
                                   {"$set": {"payment_status": payment_status}})
+    
+def _serialize_payment(payment):
+    payment["_id"] = str(payment["_id"])
+    return payment
+
+def get_payment_json(id):
+    db=get_db_client()
+    payment = db.payment_details.find_one({"payment_id":id})
+    return _serialize_payment(payment)

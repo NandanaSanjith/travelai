@@ -27,6 +27,13 @@ def get_booking_details(id):
     db=get_db_client()
     return db["booking_details"].find_one({"booking_id":id})
 
+def get_booking_details_json(id):
+    booking_details=get_booking_details(id)
+    return _serialize_booking(booking_details)
+
+def _serialize_booking(booking_details):
+    booking_details["_id"] = str(booking_details["_id"])
+    return booking_details
 
 def create_booking(flight_id,
                 name,
