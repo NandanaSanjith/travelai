@@ -46,6 +46,7 @@
       <booking-view 
         v-if="canShowBookingView"
         :flight="selectedFlight"
+        :adults="adults"
         class="mx-auto"
         style="width:720px"
       >
@@ -76,6 +77,7 @@ const adults = ref(null);
 
 const onSearchEvent = async (query) => {
     isLoading.value=true
+    adults.value=query.passengers
     await fetchFlightDetails(query.sourceCity,query.destCity,query.date)
     isLoading.value=false
 }

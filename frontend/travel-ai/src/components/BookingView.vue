@@ -60,18 +60,23 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref,onMounted } from "vue";
 import PassengerDetails from "./PassengerDetails.vue";
 import PaymentDetails from "./PaymentDetails.vue";
 
 const props = defineProps({
     flight:Object ,
+    adults: Number,
  })
 const step = ref(1);
 const name = ref("");
 const email = ref("");
 const totalPayment = ref(0)
 const isPaying=ref(false)
+
+onMounted(() => {
+  totalPayment.value=props.flight.price*props.adults
+})
 
 const onConfirmBooking = async () => {
   isPaying.value=true
