@@ -124,17 +124,34 @@
         />
 
         <!-- Search -->
-        <v-btn
-          color="primary"
-          class="search-btn"
-          height="56"
-          :loading="props.isLoading"
-          @click="handleSearch"
-          prepend-icon="mdi-magnify"
-          elevation="4"
-        >
-          Search
-        </v-btn>
+        <div class="d-flex justify-space-between" style="width: 100%;">
+          <v-btn
+            color="secondary"
+            variant="text"
+            height="56"
+            @click="handleManageBooking"
+            prepend-icon="mdi-ticket-account"
+            elevation="2"
+            class="ml-2"
+          >
+            Manage Booking
+          </v-btn>
+
+
+          <v-btn
+            color="primary"
+            class="search-btn mr-4"
+            height="56"
+            :loading="props.isLoading"
+            @click="handleSearch"
+            prepend-icon="mdi-magnify"
+            elevation="4"
+          >
+            Search
+          </v-btn>
+      </div>
+
+
       </v-card>
     </div>
 </template>
@@ -142,7 +159,7 @@
 <script setup>
 import { ref } from "vue"
 
-const emit = defineEmits(['onSearch'])
+const emit = defineEmits(['onSearch','onShowManageBooking'])
 
 const travelType = ref("Flight")
 const sourceCity = ref(null)
@@ -181,6 +198,10 @@ const handleSearch = () => {
     passengers: passengers.value
   }
   emit('onSearch', query)
+}
+ 
+const handleManageBooking = () => {
+  emit('onShowManageBooking')
 }
 
 const customFilter = (value, query, item) => {
