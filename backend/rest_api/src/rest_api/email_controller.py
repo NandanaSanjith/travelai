@@ -58,6 +58,7 @@ def send_confirmation_email(booking_details,flight_details):
     if not booking_details or not flight_details:
         raise HTTPException(status_code=404, detail="Invalid input")
     airports=get_airports()
+    weather_data = get_weather_data(flight_details["arrival_city"])
     name=booking_details["name"]
     email=booking_details["email"]
     template_variables={
@@ -84,9 +85,39 @@ def send_confirmation_email(booking_details,flight_details):
         'arrival_city_iata': flight_details['arrival_city_iata'].upper(),
         'arrival_airport': _get_airport_name(airports, flight_details['arrival_city_iata']),
         'arrival_time': flight_details['arrival_time'].upper(),
-        'arrival_date': flight_details['arrival_date'].upper()
+        'arrival_date': flight_details['arrival_date'].upper(),
+        'weather_temp': weather_data['weather_temp'],
+        'weather_description': weather_data['weather_description'],
+        'weather_humidity': weather_data['weather_humidity'],
+        'weather_wind_speed': weather_data['weather_wind_speed']
     }
 
     template = env.get_template("booking_confirmation.html")
     html_content = template.render(**template_variables)
     send_email(email, name,f"Your flight Booking Confirmation - {booking_details['booking_id']}", html_content)
+
+
+def get_weather_data(city_name):
+   try:
+       api_key = os.getenv("VITE_WEATHER_API_KEY")  # or your weather API key env variable
+       url = f"https://api.openweathermap.org/data/2.5/weather?q={city_name}&appid={api_key}&units=metric"
+       response = requests.get(url)
+       if response.ok:
+           data = response.json()
+           return {
+               "weather_temp": round(data["main"]["temp"]),
+               "weather_description": data["weather"][0]["description"],
+               "weather_humidity": data["main"]["humidity"],
+               "weather_wind_speed": round(data["wind"]["speed"], 1)
+           }
+   except Exception as e:
+       print(f"Weather fetch error: {e}")
+
+
+   # Return default values if API fails
+   return {
+       "weather_temp": "N/A",
+       "weather_description": "unavailable",
+       "weather_humidity": "N/A",
+       "weather_wind_speed": "N/A"
+   }

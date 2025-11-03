@@ -98,7 +98,7 @@ def airports():
 @app.get("/send_testmail")
 def send_test():
     print ("sent test")
-    booking_details=get_booking_details("79K0APMD")
+    booking_details=get_booking_details("LIFUYCYZ")
     flight_details=get_flight_details(booking_details['flight_id'])
     return send_confirmation_email(booking_details,flight_details)
 

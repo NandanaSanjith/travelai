@@ -68,6 +68,50 @@
       </td>
     </tr>
 
+    <!-- Weather Information -->
+ <tr>
+ <td style="padding:20px;">
+   <table width="100%" cellpadding="0" cellspacing="0" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius:12px; overflow:hidden;">
+     <tr>
+       <td style="padding:25px; color:#ffffff;">
+         <h3 style="margin:0 0 20px 0; font-size:20px; font-weight:600;">
+           Weather at {{arrival_city}}
+         </h3>
+         <table width="100%" cellpadding="0" cellspacing="0">
+           <tr>
+             <td style="text-align:center; padding:15px; background:rgba(255,255,255,0.1); border-radius:8px; margin-bottom:15px;">
+               <div style="font-size:48px; font-weight:bold; margin-bottom:5px;">
+                 {{weather_temp}}°C
+               </div>
+               <div style="font-size:16px; text-transform:capitalize; opacity:0.9;">
+                 {{weather_description}}
+               </div>
+             </td>
+           </tr>
+         </table>
+         <table width="100%" cellpadding="0" cellspacing="0" style="margin-top:15px;">
+           <tr>
+             <td style="padding:10px; text-align:center; background:rgba(255,255,255,0.1); border-radius:8px; width:48%;">
+               <div style="font-size:12px; opacity:0.8; margin-bottom:5px;">Humidity</div>
+               <div style="font-size:18px; font-weight:600;">{{weather_humidity}}%</div>
+             </td>
+             <td style="width:4%;"></td>
+             <td style="padding:10px; text-align:center; background:rgba(255,255,255,0.1); border-radius:8px; width:48%;">
+               <div style="font-size:12px; opacity:0.8; margin-bottom:5px;">Wind</div>
+               <div style="font-size:18px; font-weight:600;">{{weather_wind_speed}} m/s</div>
+             </td>
+           </tr>
+         </table>
+         <p style="margin:15px 0 0 0; font-size:13px; opacity:0.9; text-align:center;">
+           ☀️ Pack accordingly for your trip!
+         </p>
+       </td>
+     </tr>
+   </table>
+ </td>
+ </tr> 
+
+
     <!-- Footer -->
     <tr>
       <td style="padding:20px; font-size:12px; color:#999999; text-align:center; border-top:1px solid #e0e0e0;">
