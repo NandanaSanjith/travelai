@@ -55,24 +55,25 @@ def create_booking(flight_id,
      "name": name,
      "email": email,
      "booking_date": convert_date_to_string(get_todays_date()),
-    "total_passengers": adults,
+     "total_passengers": adults,
      "flight_id": flight_id
     }
 
     db["booking_details"].insert_one(booking)
     return {"status": "success", "booking_id": booking_id}
 
-def insert_booking(booking_id,name,email,payment_id,adults,flight_id):
+def insert_booking(booking_id,name,email,payment_id,adults,flight_id,passenger_details):
     db=get_db_client()
     booking = { 
      "booking_id": booking_id,
      "name": name,
      "email": email,
      "booking_date": convert_date_to_string(get_todays_date()),
-    "total_passengers": adults,
+     "total_passengers": adults,
      "flight_id": flight_id,
      "payment_id":payment_id,
-     "booking_status":"pending"
+     "booking_status":"pending",
+     "passenger_details": passenger_details
     }
     db["booking_details"].insert_one(booking)
 

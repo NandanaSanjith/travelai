@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Union, Optional, List
 from pydantic import BaseModel
 import os
 from dotenv import load_dotenv
@@ -53,11 +53,18 @@ class ChatMessage(BaseModel):
     message: str
     reset_conversation: bool = False
 
+class PassengerDetails(BaseModel):
+    name: str
+    identification_type: str
+    identification_number: str
+
+
 class StartBookingDetails(BaseModel):
     id: str
     name: str
     adults: int
     email: str
+    passenger_details: Optional[List[PassengerDetails]] = []
 
 @app.get("/flights")
 def get_flights(src_city: str,
@@ -81,9 +88,17 @@ def start_booking(booking_details:StartBookingDetails):
     amount_in_rupee=flight_details["price"]*booking_details.adults
     payment_session=create_order(amount_in_rupee,booking_id)
     print(payment_session["url"])
-    insert_booking(booking_id,booking_details.name,booking_details.email,
-                   payment_session["payment_id"],booking_details.adults,booking_details.id)
-    insert_payment_record(payment_session["payment_id"],booking_id,"pending",payment_session["url"])
+    passenger_details_list = [p.dict() for p in booking_details.passenger_details]
+    insert_booking(booking_id,
+                   booking_details.name,
+                   booking_details.email,
+                   payment_session["payment_id"],
+                   booking_details.adults,
+                   booking_details.id,
+                   passenger_details_list)
+    insert_payment_record(payment_session["payment_id"],
+                          booking_id,"pending",
+                          payment_session["url"])
     available_seats=flight_details["available_seats"]-booking_details.adults
     update_available_seats(booking_details.id,available_seats)
     return {"booking_id": booking_id,"payment_session": payment_session}
