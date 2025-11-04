@@ -94,6 +94,7 @@ class ClaudeClient:
 
             if not tool_invoked:
                 break
+        print(final_text)
         return "\n".join(final_text)
     
     async def send_chat_message(self, message: str, reset_conversation: bool = False):
