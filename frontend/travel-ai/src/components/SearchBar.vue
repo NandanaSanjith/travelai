@@ -5,18 +5,6 @@
         class="search-card d-flex flex-wrap align-center"
         style="border-radius: 0px;"
       >
-        <!-- Mode -->
-        <v-select
-          v-model="travelType"
-          :items="['Flight', 'Train', 'Bus']"
-          label="Mode"
-          variant="outlined"
-          class="field mode-field"
-          density="comfortable"
-          hide-details
-          rounded
-          prepend-inner-icon="mdi-airplane"
-        />
 
         <!-- From -->
         <v-autocomplete
@@ -137,7 +125,6 @@
             Manage Booking
           </v-btn>
 
-
           <v-btn
             color="primary"
             class="search-btn mr-4"
@@ -151,7 +138,6 @@
           </v-btn>
       </div>
 
-
       </v-card>
     </div>
 </template>
@@ -161,7 +147,7 @@ import { ref } from "vue"
 
 const emit = defineEmits(['onSearch','onShowManageBooking'])
 
-const travelType = ref("Flight")
+const travelType = ref("Flight") // Mode is fixed as Flight (no UI)
 const sourceCity = ref(null)
 const destCity = ref(null)
 const date = ref("")
@@ -191,7 +177,7 @@ const decrementPassengers = () => {
 
 const handleSearch = () => {
   const query = {
-    travelType: travelType.value,
+    travelType: travelType.value, // Always 'Flight'
     sourceCity: sourceCity.value,
     destCity: destCity.value,
     date: date.value,
@@ -199,7 +185,7 @@ const handleSearch = () => {
   }
   emit('onSearch', query)
 }
- 
+
 const handleManageBooking = () => {
   emit('onShowManageBooking')
 }
