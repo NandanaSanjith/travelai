@@ -59,6 +59,7 @@ def start_booking_flight(id: str,
             booking_id: An id indicating the booking
             payment_session: A dictionary containing url and a payment session id.
             Customer has to complete the payment using the url.
+            Make sure the response contains the full url and not linkify.
             If the payment is not complete in 30 minutes the booking will be cancelled.
             An email will be sent with the booking confirmation after the payment is done.
     """
